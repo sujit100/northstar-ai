@@ -1,0 +1,274 @@
+---
+import { navItems } from '../data/nav';
+---
+
+<header
+  data-nav-header
+  class="fixed top-0 inset-x-0 z-50 bg-white border-b-2 border-[rgba(10,10,10,0.18)] shadow-[0_2px_12px_rgba(10,10,10,0.05)] transition-shadow duration-300 ease-smooth data-[scrolled=true]:shadow-[0_6px_28px_-8px_rgba(10,10,10,0.16)]"
+>
+  <div class="container-page flex items-center justify-between gap-4 md:gap-6 h-20 md:h-24">
+    {/* Brand: free-floating, no container, plain bright white behind it (the header strip) */}
+    <a
+      href="/"
+      aria-label="North Star AI home"
+      class="inline-flex items-center gap-3.5 md:gap-4 link-quiet"
+    >
+      <img
+        src="/northstar-logo.svg"
+        alt=""
+        width="40"
+        height="40"
+        class="block shrink-0 w-9 h-9 md:w-10 md:h-10"
+      />
+      <span
+        class="font-display font-bold text-[24px] md:text-[28px] tracking-[-0.01em] text-text-primary whitespace-nowrap"
+      >
+        North Star AI
+      </span>
+    </a>
+
+    {/* Right: nav links + CTA */}
+    <nav class="flex items-center">
+      <ul class="hidden md:flex items-center gap-8 lg:gap-10 mr-8 lg:mr-10">
+        {
+          navItems.map((item) => (
+            <li class="relative group">
+              <a
+                href={item.href}
+                class="inline-flex items-center gap-1 text-[17.6px] font-semibold text-text-primary link-quiet py-2"
+              >
+                {item.label}
+                {item.children && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-3 h-3 mt-0.5 transition-transform duration-200 ease-smooth group-hover:rotate-180 group-focus-within:rotate-180"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                )}
+              </a>
+
+              {item.children && (
+                <div class="absolute left-1/2 -translate-x-1/2 top-full pt-3 invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-[opacity,transform,visibility] duration-200 ease-smooth z-10">
+                  <div class="rounded-2xl bg-white border border-border-subtle shadow-[0_8px_32px_-12px_rgba(10,10,10,0.18)] p-2 min-w-[260px]">
+                    {item.children.map((child) =>
+                      child.disabled ? (
+                        <span
+                          aria-disabled="true"
+                          class="flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl text-[14px] font-medium text-text-primary/35 cursor-not-allowed"
+                        >
+                          <span>{child.label}</span>
+                          <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-text-secondary/60">
+                            Soon
+                          </span>
+                        </span>
+                      ) : (
+                        <a
+                          href={child.href}
+                          class="block px-4 py-2.5 rounded-xl text-[14px] font-medium text-text-primary/85 hover:bg-background hover:text-accent transition-colors duration-150 ease-smooth"
+                        >
+                          {child.label}
+                        </a>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+
+      <a
+        href="/book/"
+        class="hidden md:inline-flex items-center gap-1.5 bg-text-primary text-background pl-5 pr-4 h-11 text-[14px] font-medium rounded-full transition-colors duration-200 ease-smooth hover:bg-accent"
+      >
+        Book a Call
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-3.5 h-3.5"
+          aria-hidden="true"
+        >
+          <path d="m9 6 6 6-6 6"></path>
+        </svg>
+      </a>
+
+      <button
+        type="button"
+        data-mobile-toggle
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="md:hidden inline-flex flex-col items-center justify-center gap-[5px] w-12 h-12 rounded-full"
+      >
+        <span class="block h-px w-5 bg-text-primary transition-transform duration-300 ease-smooth"></span>
+        <span class="block h-px w-5 bg-text-primary transition-all duration-300 ease-smooth"></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div
+  id="mobile-menu"
+  data-mobile-menu
+  class="fixed inset-0 z-40 bg-white opacity-0 pointer-events-none translate-y-2 transition-[opacity,transform] duration-300 ease-smooth flex flex-col"
+  aria-hidden="true"
+>
+  <div class="container-page flex items-center justify-between h-20 md:h-24 shrink-0">
+    <span class="inline-flex items-center gap-3.5">
+      <img
+        src="/northstar-logo.svg"
+        alt=""
+        width="36"
+        height="36"
+        class="block shrink-0 w-9 h-9"
+      />
+      <span class="font-display font-bold text-[24px] tracking-[-0.01em] text-text-primary">
+        North Star AI
+      </span>
+    </span>
+    <button
+      type="button"
+      data-mobile-close
+      aria-label="Close menu"
+      class="inline-flex items-center justify-center w-11 h-11 -mr-2"
+    >
+      <span class="relative block w-6 h-px">
+        <span class="absolute inset-0 bg-text-primary rotate-45"></span>
+        <span class="absolute inset-0 bg-text-primary -rotate-45"></span>
+      </span>
+    </button>
+  </div>
+
+  <div class="container-page flex-1 overflow-y-auto pb-12">
+    <ul class="flex flex-col divide-y divide-border-subtle">
+      {
+        navItems.map((item) => (
+          <li>
+            {item.children ? (
+              <details class="group/details">
+                <summary class="list-none flex items-center justify-between py-5 cursor-pointer">
+                  <span class="font-display font-semibold tracking-tightest-2 text-[28px] leading-[1.05]">
+                    {item.label}
+                  </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5 transition-transform duration-200 ease-smooth group-open/details:rotate-180"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </summary>
+                <div class="pb-6 -mt-1">
+                  <ul class="flex flex-col gap-1">
+                    {item.children.map((child) => (
+                      <li>
+                        {child.disabled ? (
+                          <span
+                            aria-disabled="true"
+                            class="flex items-center justify-between gap-3 py-2 text-[16px] text-text-primary/35 cursor-not-allowed"
+                          >
+                            <span>{child.label}</span>
+                            <span class="text-[10px] font-semibold uppercase tracking-[0.16em] text-text-secondary/60">
+                              Soon
+                            </span>
+                          </span>
+                        ) : (
+                          <a
+                            href={child.href}
+                            data-mobile-link
+                            class="block py-2 text-[16px] text-text-primary/80 link-quiet"
+                          >
+                            {child.label}
+                          </a>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </details>
+            ) : (
+              <a
+                href={item.href}
+                data-mobile-link
+                class="block py-5 font-display font-semibold tracking-tightest-2 text-[28px] leading-[1.05] link-quiet"
+              >
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))
+      }
+      <li>
+        <a
+          href="/book/"
+          data-mobile-link
+          class="block py-5 font-display font-semibold tracking-tightest-2 text-[28px] leading-[1.05] text-accent link-quiet"
+        >
+          Book a Call
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-nav-header]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-mobile-toggle]');
+  const close = document.querySelector<HTMLButtonElement>('[data-mobile-close]');
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+  const mobileLinks = document.querySelectorAll<HTMLAnchorElement>('[data-mobile-link]');
+
+  if (header) {
+    const onScroll = () => {
+      if (window.scrollY > 12) header.setAttribute('data-scrolled', 'true');
+      else header.removeAttribute('data-scrolled');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  const open = () => {
+    if (!menu || !toggle) return;
+    menu.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+    menu.classList.add('opacity-100');
+    menu.setAttribute('aria-hidden', 'false');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const shut = () => {
+    if (!menu || !toggle) return;
+    menu.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+    menu.classList.remove('opacity-100');
+    menu.setAttribute('aria-hidden', 'true');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+
+  toggle?.addEventListener('click', open);
+  close?.addEventListener('click', shut);
+  mobileLinks.forEach((link) => link.addEventListener('click', shut));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') shut();
+  });
+</script>

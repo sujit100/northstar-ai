@@ -1,0 +1,278 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+// ---------------------------------------------------------------------------
+// EMAIL SETUP — Web3Forms (free, unlimited submissions)
+// ---------------------------------------------------------------------------
+// 1. Go to https://web3forms.com
+// 2. Enter sujitmohanty75@gmail.com
+// 3. Web3Forms emails you an access key
+// 4. Paste it below as the value of ACCESS_KEY
+//
+// Submissions will land in sujitmohanty75@gmail.com automatically. No backend
+// required. To swap providers later (Formspree, custom serverless), just
+// change the form's `action` URL and the hidden fields below.
+// ---------------------------------------------------------------------------
+const ACCESS_KEY = 'a4bcd298-8494-414d-bea8-575b4a8e8aa9';
+
+// NOTE: Astro renders this page statically at build time, so we can't read
+// `?sent=true` from Astro.url at render time. Both the form and the thank-you
+// state are rendered into the DOM, then a tiny inline script at the bottom of
+// the page reads the URL and toggles which one is visible.
+//
+// Web3Forms also requires the `redirect` field to be an absolute URL. It's
+// populated client-side by the same script using window.location.origin so it
+// works in dev (localhost) and prod without any config changes.
+
+const title = 'Send a brief · Northstar AI';
+const description =
+  'A quick brief about your business gets a guaranteed 24-hour response from Sujit Mohanty. No call required.';
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+
+  <main class="pt-28 md:pt-36 pb-24 md:pb-32">
+    <section class="container-page">
+      <div class="max-w-[640px] mx-auto">
+        <div class="reveal">
+          <span class="label-eyebrow">Quick brief</span>
+        </div>
+
+        <h1
+          class="reveal mt-6 md:mt-8 heading-display text-[40px] sm:text-[52px] md:text-[60px] tracking-tightest-3 max-w-[18ch]"
+        >
+          Tell me what you're <span class="text-accent">working on.</span>
+        </h1>
+
+        <p
+          class="reveal mt-6 md:mt-8 body-secondary text-[17px] md:text-[19px] leading-[1.55]"
+        >
+          A quick brief gets a guaranteed
+          <span class="text-text-primary font-semibold">24-hour response</span>. Easier
+          than a call, especially if you're still figuring out what you need.
+        </p>
+
+        <div id="qb-sent" class="reveal mt-14 md:mt-20 text-center" hidden>
+            <span
+              class="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-full bg-accent text-white shadow-[0_8px_32px_-12px_rgba(194,65,12,0.5)]"
+              aria-hidden="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-10 h-10 md:w-12 md:h-12"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </span>
+
+            <h2
+              class="mt-8 md:mt-10 heading-display text-[40px] sm:text-[52px] md:text-[60px] tracking-tightest-3"
+            >
+              Brief <span class="text-accent">sent.</span>
+            </h2>
+
+            <p class="mt-5 md:mt-6 body-text text-[17px] md:text-[19px] max-w-[480px] mx-auto leading-[1.55]">
+              Your brief landed in my inbox. I'll be in touch within
+              <span class="font-semibold">24 hours</span> with the right questions or a
+              first sketch of what an engagement could look like.
+            </p>
+
+            <div class="mt-10 md:mt-12 flex flex-wrap justify-center gap-3">
+              <a
+                href="/quick-brief/"
+                class="inline-flex items-center gap-2 bg-text-primary text-background pl-6 pr-5 h-12 text-[14.5px] font-medium rounded-full transition-colors duration-200 ease-smooth hover:bg-accent"
+              >
+                Send another brief
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m13 6 6 6-6 6"></path>
+                </svg>
+              </a>
+              <a
+                href="/"
+                class="inline-flex items-center gap-2 border border-text-primary text-text-primary pl-6 pr-5 h-12 text-[14.5px] font-medium rounded-full transition-colors duration-200 ease-smooth hover:bg-text-primary hover:text-background"
+              >
+                Back to home
+              </a>
+            </div>
+          </div>
+
+          <form
+            id="qb-form"
+            action="https://api.web3forms.com/submit"
+            method="POST"
+            class="reveal mt-12 md:mt-16 space-y-7 md:space-y-8"
+          >
+            {/* Web3Forms hidden config */}
+            <input type="hidden" name="access_key" value={ACCESS_KEY} />
+            <input type="hidden" name="subject" value="New brief from Northstar AI" />
+            <input type="hidden" name="from_name" value="Northstar AI · Quick brief" />
+            <input type="hidden" name="redirect" id="qb-redirect" value="" />
+
+            {/* Honeypot — hidden from users, bots fill it and get rejected */}
+            <input
+              type="checkbox"
+              name="botcheck"
+              tabindex="-1"
+              autocomplete="off"
+              style="position:absolute;left:-9999px;opacity:0;height:0;width:0;"
+              aria-hidden="true"
+            />
+
+            {/* Email */}
+            <div>
+              <label
+                for="qb-email"
+                class="block font-display font-semibold text-[15px] tracking-tight text-text-primary"
+              >
+                Email <span class="text-accent">*</span>
+              </label>
+              <input
+                id="qb-email"
+                type="email"
+                name="email"
+                required
+                autocomplete="email"
+                placeholder="you@yourcompany.com"
+                class="block w-full mt-2.5 px-4 h-12 text-[15.5px] bg-white border border-border-subtle rounded-xl placeholder:text-text-secondary/60 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+              />
+            </div>
+
+            {/* Phone (optional) */}
+            <div>
+              <label
+                for="qb-phone"
+                class="block font-display font-semibold text-[15px] tracking-tight text-text-primary"
+              >
+                Phone <span class="text-text-secondary font-normal">(optional)</span>
+              </label>
+              <input
+                id="qb-phone"
+                type="tel"
+                name="phone"
+                autocomplete="tel"
+                placeholder="+1 ..."
+                class="block w-full mt-2.5 px-4 h-12 text-[15.5px] bg-white border border-border-subtle rounded-xl placeholder:text-text-secondary/60 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+              />
+            </div>
+
+            {/* Business name (optional) */}
+            <div>
+              <label
+                for="qb-business"
+                class="block font-display font-semibold text-[15px] tracking-tight text-text-primary"
+              >
+                Business name
+                <span class="text-text-secondary font-normal">(optional)</span>
+              </label>
+              <input
+                id="qb-business"
+                type="text"
+                name="business_name"
+                autocomplete="organization"
+                placeholder="Your company"
+                class="block w-full mt-2.5 px-4 h-12 text-[15.5px] bg-white border border-border-subtle rounded-xl placeholder:text-text-secondary/60 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors"
+              />
+            </div>
+
+            {/* Message */}
+            <div>
+              <label
+                for="qb-message"
+                class="block font-display font-semibold text-[15px] tracking-tight text-text-primary"
+              >
+                What's your situation? <span class="text-accent">*</span>
+              </label>
+              <textarea
+                id="qb-message"
+                name="message"
+                required
+                rows="7"
+                placeholder="Briefly describe what your business does and what kind of solution you're looking for…"
+                class="block w-full mt-2.5 px-4 py-3 text-[15.5px] bg-white border border-border-subtle rounded-xl placeholder:text-text-secondary/60 focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-colors resize-y leading-[1.55]"
+              ></textarea>
+              <p class="mt-2.5 text-[13px] body-secondary leading-[1.5]">
+                No need to nail every detail. If you don't know yet, just sketch it —
+                I'll follow up quickly with the right questions.
+              </p>
+            </div>
+
+            <div class="pt-2 flex flex-wrap items-center gap-4">
+              <button
+                type="submit"
+                class="inline-flex items-center gap-2 bg-text-primary text-background pl-6 pr-5 h-12 text-[15px] font-medium rounded-full transition-colors duration-200 ease-smooth hover:bg-accent"
+              >
+                Send brief
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="m13 6 6 6-6 6"></path>
+                </svg>
+              </button>
+
+              <span class="text-[13px] text-text-secondary">
+                or <a href="/book/" class="text-text-primary font-semibold link-quiet link-underline">book a 30-min call</a> instead.
+              </span>
+            </div>
+
+            <p class="text-[12.5px] text-text-secondary leading-[1.55]">
+              I'll never share your details. One follow-up email within 24 hours, max.
+            </p>
+          </form>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script is:inline>
+  // Astro renders this page statically, so two things have to happen client-side:
+  //   1. Set the form's `redirect` field to an absolute URL (Web3Forms requires
+  //      this; a relative path falls back to their generic confirmation page).
+  //   2. After Web3Forms redirects back here with ?sent=true, swap the form for
+  //      the branded thank-you state.
+  (function () {
+    var redirectInput = document.getElementById('qb-redirect');
+    if (redirectInput) {
+      redirectInput.value = window.location.origin + '/quick-brief/?sent=true';
+    }
+
+    if (new URLSearchParams(window.location.search).get('sent') === 'true') {
+      var form = document.getElementById('qb-form');
+      var sent = document.getElementById('qb-sent');
+      if (form) form.setAttribute('hidden', '');
+      if (sent) sent.removeAttribute('hidden');
+      // Land at the top of the confirmation, not wherever they were scrolled.
+      window.scrollTo(0, 0);
+    }
+  })();
+</script>

@@ -1,0 +1,124 @@
+---
+const steps = [
+  {
+    label: 'Step 01',
+    title: 'Discovery Call',
+    body:
+      "We spend 30 minutes understanding your business, your bottlenecks, and where AI can realistically help. No pitch, no pressure — just a clear conversation about what's possible.",
+  },
+  {
+    label: 'Step 02',
+    title: 'Scoped Proposal',
+    body:
+      "I send a fixed-scope, fixed-price proposal within 48 hours. You know exactly what you're getting, what it costs, and when it'll be delivered. No open-ended consulting bills.",
+  },
+  {
+    label: 'Step 03',
+    title: 'Build & Deliver',
+    body:
+      "I build the solution, integrate it with your existing tools, train your team, and stay close for a month afterward to make sure it's working. Then it's yours.",
+  },
+];
+
+const valueProps = [
+  {
+    title: '30-day delivery — guaranteed',
+    body: 'Your product or solution ships in thirty days from kickoff, every time.',
+  },
+  {
+    title: 'No open-ended consulting',
+    body: 'Every engagement has a fixed scope and an end date. Built, delivered, done.',
+  },
+  {
+    title: 'Fixed price, discussed upfront',
+    body: 'You know the full investment before any work begins. Zero surprise invoices.',
+  },
+  {
+    title: 'Optional retainer for ongoing support',
+    body: "Want me on tap after launch? Lightweight monthly retainer — only if you need it.",
+  },
+];
+---
+
+<section id="approach" class="section-pad" aria-labelledby="approach-heading">
+  <div class="container-page">
+    <div class="reveal">
+      <span class="label-eyebrow">How we engage</span>
+    </div>
+
+    <h2
+      id="approach-heading"
+      class="reveal mt-6 md:mt-8 heading-display text-[36px] sm:text-[46px] md:text-[56px] lg:text-[60px] tracking-tightest-3 max-w-[20ch]"
+    >
+      A simple three-step engagement.
+    </h2>
+
+    <ol class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 lg:gap-12">
+      {
+        steps.map((step, idx) => (
+          <li class="reveal relative">
+            {idx > 0 && (
+              <span
+                aria-hidden="true"
+                class="hidden md:block absolute -left-4 top-3 h-px w-8 bg-divider"
+              />
+            )}
+            <span class="block text-[12px] font-semibold uppercase tracking-[0.20em] text-accent">
+              {step.label}
+            </span>
+            <h3 class="mt-5 font-display font-semibold text-[24px] md:text-[26px] leading-[1.2] tracking-tight text-text-primary">
+              {step.title}
+            </h3>
+            <p class="mt-4 text-[15.5px] body-secondary leading-[1.65] max-w-[36ch]">
+              {step.body}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="reveal mt-24 md:mt-32">
+      <span class="label-eyebrow text-accent">What you can count on</span>
+    </div>
+
+    <h3
+      class="reveal mt-5 md:mt-6 heading-display text-[28px] sm:text-[36px] md:text-[44px] tracking-tightest-3 max-w-[24ch]"
+    >
+      Clear scope. Fixed price. Zero surprises.
+    </h3>
+
+    <ul class="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+      {
+        valueProps.map((prop) => (
+          <li class="reveal flex items-start gap-4 p-5 md:p-6 rounded-2xl border-2 border-accent/35 bg-accent/[0.04] transition-colors duration-200 ease-smooth hover:border-accent/55 hover:bg-accent/[0.07]">
+            <span
+              class="flex-shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full bg-accent text-white mt-0.5"
+              aria-hidden="true"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-4 h-4"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </span>
+            <div>
+              <span class="block font-display font-semibold text-[17px] md:text-[18px] leading-[1.3] tracking-tight text-text-primary">
+                {prop.title}
+              </span>
+              <span class="mt-1.5 block text-[14.5px] body-secondary leading-[1.55]">
+                {prop.body}
+              </span>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

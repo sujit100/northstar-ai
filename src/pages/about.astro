@@ -1,0 +1,151 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import LinkedInCard from '../components/LinkedInCard.astro';
+import Engagement from '../components/Engagement.astro';
+import { bio } from '../data/bio';
+import { pressFeatures } from '../data/press';
+
+const title = 'About · Northstar AI';
+const description =
+  "Sujit Mohanty's background — a decade shipping AI products at TikTok and Amazon, now bringing that playbook to growing businesses.";
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+
+  <main class="pt-28 md:pt-36 pb-24 md:pb-32">
+    {/* ============ Background ============ */}
+    <section id="background" class="container-page" aria-labelledby="about-heading">
+      <div class="reveal">
+        <span class="label-eyebrow">About</span>
+      </div>
+
+      <div class="mt-6 md:mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-14 lg:gap-20 items-start">
+        <div class="lg:col-span-7">
+          <h1
+            id="about-heading"
+            class="reveal heading-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[72px] tracking-tightest-3"
+          >
+            Hi, I'm
+            <span class="block text-accent">Sujit Mohanty.</span>
+          </h1>
+
+          <div class="reveal mt-10 md:mt-14 max-w-[60ch] space-y-6">
+            {
+              bio.paragraphs.map((p, idx) => (
+                <p
+                  class={
+                    idx === 0
+                      ? 'body-text text-[18px] md:text-[20px] leading-[1.55]'
+                      : 'body-secondary text-[16px] md:text-[17px] leading-[1.7]'
+                  }
+                >
+                  {p}
+                </p>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <LinkedInCard />
+        </div>
+      </div>
+    </section>
+
+    {/* ============ Approach (mirrors home page) ============ */}
+    <Engagement />
+
+    {/* ============ Press and Speaking ============ */}
+    <section
+      id="press"
+      class="container-page mt-24 md:mt-32"
+      aria-labelledby="press-heading"
+    >
+      <div class="reveal">
+        <span class="label-eyebrow">Press and Speaking</span>
+      </div>
+
+      <h2
+        id="press-heading"
+        class="reveal mt-5 md:mt-6 heading-display text-[28px] sm:text-[34px] md:text-[40px] tracking-tightest-3 max-w-[28ch]"
+      >
+        A short trail of features I've shipped.
+      </h2>
+
+      <div class="mt-10 md:mt-14 space-y-6 md:space-y-8">
+        {
+          pressFeatures.map((p) => (
+            <article class="reveal rounded-[12px] border border-border-subtle bg-surface overflow-hidden grid grid-cols-1 md:grid-cols-[5fr_7fr] transition-colors duration-200 ease-smooth hover:border-border-hover">
+              <div class="relative aspect-[16/9] md:aspect-auto md:h-full md:min-h-[280px] bg-[#F4EFE7] min-h-[220px]">
+                <img
+                  src={p.image}
+                  alt={p.imageAlt}
+                  loading="lazy"
+                  referrerpolicy="no-referrer"
+                  class="absolute inset-0 w-full h-full object-contain p-4 md:p-6"
+                />
+              </div>
+
+              <div class="p-7 md:p-9 lg:p-10 flex flex-col">
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+                  <span class="text-accent">Feature launch</span>
+                  <span class="text-divider" aria-hidden="true">·</span>
+                  {p.publicationUrl ? (
+                    <a
+                      href={p.publicationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-text-secondary link-quiet link-underline inline-flex items-center gap-1"
+                    >
+                      {p.publication}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-2.5 h-2.5"
+                        aria-hidden="true"
+                      >
+                        <path d="M7 17 17 7" />
+                        <path d="M8 7h9v9" />
+                      </svg>
+                      <span class="sr-only">(opens in new tab)</span>
+                    </a>
+                  ) : (
+                    <span>{p.publication}</span>
+                  )}
+                  <span class="text-divider" aria-hidden="true">·</span>
+                  <span>{p.date}</span>
+                </div>
+
+                <h3 class="mt-5 font-display font-semibold text-[22px] md:text-[26px] leading-[1.2] tracking-tight text-text-primary">
+                  {p.title}
+                </h3>
+
+                <p class="mt-3 body-text text-[15.5px] leading-[1.6]">
+                  {p.summary}
+                </p>
+
+                <blockquote class="mt-6 pl-4 border-l-2 border-accent/40 text-[14.5px] body-secondary leading-[1.65]">
+                  <span aria-hidden="true">“</span>{p.excerpt}<span aria-hidden="true">”</span>
+                </blockquote>
+
+                <p class="mt-auto pt-6 text-[11.5px] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+                  {p.feature}
+                </p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

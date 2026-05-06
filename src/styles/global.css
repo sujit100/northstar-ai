@@ -1,0 +1,306 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  section[id] {
+    scroll-margin-top: 96px;
+  }
+
+  body {
+    @apply bg-background text-text-primary font-sans;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+  }
+
+  ::selection {
+    background: rgba(194, 65, 12, 0.18);
+    color: #0A0A0A;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply max-w-container mx-auto px-6 sm:px-8 lg:px-10;
+  }
+
+  .section-pad {
+    @apply py-16 md:py-32;
+  }
+
+  .label-eyebrow {
+    @apply text-xs font-medium uppercase tracking-[0.18em] text-text-secondary;
+  }
+
+  .heading-display {
+    @apply font-display font-semibold tracking-tightest-2 text-text-primary;
+    line-height: 1.02;
+  }
+
+  .body-text {
+    @apply text-text-primary;
+    line-height: 1.6;
+  }
+
+  .body-secondary {
+    @apply text-text-secondary;
+    line-height: 1.6;
+  }
+
+  .divider-hairline {
+    @apply h-px w-full bg-divider;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-text-primary text-background px-6 py-3.5 text-[15px] font-medium rounded-full transition-all duration-200 ease-smooth hover:bg-accent;
+  }
+
+  .link-quiet {
+    @apply transition-colors duration-200 ease-smooth hover:text-accent;
+  }
+
+  .icon-accent svg {
+    @apply text-accent;
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+  }
+
+  .icon-accent-sm svg {
+    @apply text-accent;
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+  }
+
+  .icon-accent-card svg {
+    @apply text-accent;
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 1.75;
+  }
+}
+
+@layer utilities {
+  /* Reveal animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hero-line {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: heroIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .hero-line-1 { animation-delay: 0.05s; }
+  .hero-line-2 { animation-delay: 0.20s; }
+  .hero-line-3 { animation-delay: 0.35s; }
+  .hero-line-4 { animation-delay: 0.50s; }
+  .hero-line-5 { animation-delay: 0.65s; }
+
+  @keyframes heroIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-3d-slot {
+    background: linear-gradient(135deg, #FAFAF8 0%, #EFE7DC 100%);
+  }
+
+  /* Underline animation for nav links */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .link-underline:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- Service-card flow animations ---------- */
+@keyframes svc-flow1 {
+  to { stroke-dashoffset: -28; }
+}
+@keyframes svc-flow2 {
+  to { stroke-dashoffset: -32; }
+}
+@keyframes svc-pulse-source {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+@keyframes svc-brain-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+@keyframes svc-ring-expand {
+  0%   { r: 38; opacity: 0.5; }
+  100% { r: 60; opacity: 0; }
+}
+@keyframes svc-bar-grow {
+  0%       { transform: scaleY(0); }
+  30%, 70% { transform: scaleY(1); }
+  100%     { transform: scaleY(0); }
+}
+@keyframes svc-line-draw {
+  0%       { stroke-dashoffset: 1; }
+  35%      { stroke-dashoffset: 0; }
+  65%      { stroke-dashoffset: 0; }
+  100%     { stroke-dashoffset: -1; }
+}
+@keyframes svc-fade-in-out {
+  0%, 15%, 100% { opacity: 0; }
+  35%, 70%      { opacity: 1; }
+}
+@keyframes svc-typewriter {
+  0%       { clip-path: inset(0 100% 0 0); }
+  35%, 80% { clip-path: inset(0 0% 0 0); }
+  100%     { clip-path: inset(0 100% 0 0); }
+}
+@keyframes svc-dot-blink {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+
+.service-anim svg .flow1 {
+  stroke-dasharray: 4 4;
+  animation: svc-flow1 1.4s linear infinite;
+}
+.service-anim svg .flow2 {
+  stroke-dasharray: 4 4;
+  animation: svc-flow2 2s linear infinite;
+}
+.service-anim svg .pulse-source {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: svc-pulse-source 3s ease-in-out infinite;
+}
+.service-anim svg .brain-core {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: svc-brain-pulse 2.5s ease-in-out infinite;
+}
+.service-anim svg .ring-expand {
+  animation: svc-ring-expand 2.5s ease-out infinite;
+}
+.service-anim svg .ring-expand-delayed {
+  animation: svc-ring-expand 2.5s ease-out infinite;
+  animation-delay: 1.25s;
+}
+.service-anim svg .bar-grow {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: svc-bar-grow 4s ease-in-out infinite;
+}
+.service-anim svg .line-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: svc-line-draw 4s ease-in-out infinite;
+}
+.service-anim svg .fade-in-out {
+  animation: svc-fade-in-out 4s ease-in-out infinite;
+}
+.service-anim svg .typewriter {
+  animation: svc-typewriter 5s ease-in-out infinite;
+}
+.service-anim svg .dot-blink-1 { animation: svc-dot-blink 1.2s ease-in-out infinite; animation-delay: 0s; }
+.service-anim svg .dot-blink-2 { animation: svc-dot-blink 1.2s ease-in-out infinite; animation-delay: 0.2s; }
+.service-anim svg .dot-blink-3 { animation: svc-dot-blink 1.2s ease-in-out infinite; animation-delay: 0.4s; }
+.service-anim[data-pause="true"] svg * {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-anim svg * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+    clip-path: none !important;
+  }
+}
+
+/* ---------- Insight-page charts (one-shot bar grow on scroll-in) ---------- */
+@keyframes insight-bar-h {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes insight-bar-v {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+.insight-bar-h {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.insight-bar-v {
+  transform-origin: bottom center;
+  transform: scaleY(0);
+}
+.reveal.is-visible .insight-bar-h {
+  animation: insight-bar-h 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.reveal.is-visible .insight-bar-v {
+  animation: insight-bar-v 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .insight-bar-h, .insight-bar-v {
+    transform: scaleX(1) scaleY(1) !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .hero-line {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

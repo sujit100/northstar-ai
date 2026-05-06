@@ -1,0 +1,53 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Book a Call · Northstar AI';
+const description =
+  "Book a free 30-minute consultation with Sujit Mohanty. No pressure, no payment, no obligation — just a conversation about your business.";
+---
+
+<Layout title={title} description={description}>
+  <Nav />
+
+  <main class="pt-28 md:pt-36 pb-24 md:pb-32">
+    <section id="book" class="container-page" aria-labelledby="book-heading">
+      <div class="reveal">
+        <span class="label-eyebrow">Book a call</span>
+      </div>
+
+      <h1
+        id="book-heading"
+        class="reveal mt-6 md:mt-8 heading-display text-[40px] sm:text-[52px] md:text-[64px] lg:text-[72px] tracking-tightest-3 max-w-[20ch]"
+      >
+        Let's talk for <span class="text-accent">30 minutes.</span>
+      </h1>
+
+      <p class="reveal mt-6 md:mt-8 body-secondary text-[17px] md:text-[19px] max-w-[640px] leading-[1.55]">
+        No pressure, no payment, no obligation. Just a clear conversation about your
+        business — your bottlenecks, your goals, and where AI can realistically help.
+      </p>
+
+      <p class="reveal mt-3 text-[14px] md:text-[15px] text-text-secondary max-w-[640px]">
+        Short on time? <a href="/quick-brief/" class="text-text-primary font-semibold link-quiet link-underline">Send a quick brief</a>
+        and get a guaranteed 24-hour response instead.
+      </p>
+
+      <div class="reveal mt-12 md:mt-16">
+        <div class="rounded-[12px] overflow-hidden border border-border-subtle bg-surface">
+          <iframe
+            src="https://cal.com/sujit-mohanty-75/30min?embed=true"
+            title="Book a 30-minute consultation with Sujit Mohanty"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            class="w-full block"
+            style="height: 760px; border: 0;"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

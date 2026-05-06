@@ -1,0 +1,150 @@
+---
+import { services } from '../data/services';
+import ServiceAnimation from './ServiceAnimation.astro';
+---
+
+<section id="services" class="section-pad" aria-labelledby="services-heading">
+  <div class="container-page">
+    <div class="reveal">
+      <span class="label-eyebrow">Services</span>
+    </div>
+
+    <h2
+      id="services-heading"
+      class="reveal mt-6 md:mt-8 heading-display text-[36px] sm:text-[46px] md:text-[56px] lg:text-[64px] tracking-tightest-3 max-w-[22ch]"
+    >
+      Several ways to make your business <span class="text-accent">AI-powered.</span>
+    </h2>
+
+    <p class="reveal mt-6 md:mt-8 max-w-[60ch] text-[17px] md:text-[19px] body-secondary leading-[1.55]">
+      These are the most popular engagements I run. Click any card to see the full
+      details — problem, solution, what it looks like, and typical outcome.
+    </p>
+
+    <div
+      class="mt-14 md:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7 items-start"
+    >
+      {
+        services.map((service, idx) => {
+          const indexLabel = String(idx + 1).padStart(2, '0');
+          return (
+            <details class="reveal group bg-surface border border-border-subtle rounded-2xl overflow-hidden transition-colors duration-200 ease-smooth hover:border-border-hover open:border-border-hover">
+              <summary class="cursor-pointer list-none p-6 md:p-7 marker:hidden [&::-webkit-details-marker]:hidden">
+                <div class="flex items-baseline justify-between gap-3">
+                  <span class="block text-[12px] font-semibold uppercase tracking-[0.18em] text-accent">
+                    {indexLabel}
+                  </span>
+                  <span class="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-secondary group-open:hidden">
+                    Tap to expand
+                  </span>
+                  <span class="text-[11px] font-semibold uppercase tracking-[0.16em] text-text-secondary hidden group-open:inline">
+                    Tap to collapse
+                  </span>
+                </div>
+
+                <h3 class="mt-4 font-display font-semibold text-[22px] md:text-[24px] leading-[1.18] tracking-tight text-text-primary">
+                  {service.name}
+                </h3>
+
+                <p class="mt-3 text-[14.5px] body-secondary leading-[1.55]">
+                  {service.tagline}
+                </p>
+
+                <div class="mt-5 flex items-center gap-1.5 text-[12.5px] font-semibold uppercase tracking-[0.16em] text-accent">
+                  <span class="group-open:hidden">Learn more</span>
+                  <span class="hidden group-open:inline">Show less</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-3 h-3 transition-transform duration-200 ease-smooth group-open:rotate-180"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </div>
+              </summary>
+
+              <div class="px-6 md:px-7 pb-6 md:pb-7 border-t border-border-subtle">
+                <span class="block mt-5 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-accent">
+                  What it looks like
+                </span>
+                <div class="mt-3 rounded-xl border border-border-subtle bg-divider/30 overflow-hidden">
+                  <ServiceAnimation type={service.animationType} />
+                </div>
+
+                <p class="mt-6 body-text text-[15px] leading-[1.65]">
+                  {service.problem}
+                </p>
+
+                <ul class="mt-5 space-y-2.5">
+                  {service.bullets.map((b) => (
+                    <li class="flex gap-3 text-[14px] body-text leading-[1.55]">
+                      <span class="mt-[7px] block h-[5px] w-[5px] rounded-full bg-accent shrink-0" aria-hidden="true" />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div class="mt-6 pt-5 border-t border-border-subtle">
+                  <span class="block text-[10.5px] font-semibold uppercase tracking-[0.18em] text-accent">
+                    Typical outcome
+                  </span>
+                  <p class="mt-2 text-[13.5px] body-text leading-[1.55]">
+                    {service.outcome}
+                  </p>
+                </div>
+              </div>
+            </details>
+          );
+        })
+      }
+    </div>
+
+    {/* Custom-fit callout: invites engagements that don't match one of the six */}
+    <aside class="reveal mt-12 md:mt-16 p-7 md:p-9 lg:p-10 rounded-2xl border-2 border-accent/30 bg-accent/[0.04]">
+      <span class="block text-[12px] font-semibold uppercase tracking-[0.18em] text-accent">
+        Don't see your use case?
+      </span>
+      <h3 class="mt-3 md:mt-4 font-display font-semibold text-[22px] sm:text-[26px] md:text-[30px] leading-[1.2] tracking-tight text-text-primary max-w-[36ch]">
+        Every solution is custom-built. Your need <span class="text-accent">doesn't have to fit</span> one of these boxes.
+      </h3>
+      <p class="mt-4 body-secondary text-[15px] md:text-[16.5px] leading-[1.65] max-w-[60ch]">
+        These six are the most popular engagements I run. If your business needs
+        something different, we'll scope it from scratch around your data, your tools,
+        and the outcomes that actually matter to you.
+      </p>
+      <div class="mt-6 md:mt-7 flex flex-wrap gap-3">
+        <a
+          href="/book/"
+          class="inline-flex items-center gap-1.5 bg-text-primary text-background pl-5 pr-4 h-11 text-[14px] font-medium rounded-full transition-colors duration-200 ease-smooth hover:bg-accent"
+        >
+          Book a call
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-3.5 h-3.5"
+            aria-hidden="true"
+          >
+            <path d="m9 6 6 6-6 6" />
+          </svg>
+        </a>
+        <a
+          href="/quick-brief/"
+          class="inline-flex items-center gap-1.5 border border-text-primary text-text-primary pl-5 pr-4 h-11 text-[14px] font-medium rounded-full transition-colors duration-200 ease-smooth hover:bg-text-primary hover:text-background"
+        >
+          Send a quick brief
+        </a>
+      </div>
+    </aside>
+  </div>
+</section>

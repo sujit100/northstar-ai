@@ -1,0 +1,544 @@
+---
+export type ServiceAnimationType = 'response' | 'frontdesk' | 'documents' | 'workflow' | 'insights' | 'ainative';
+
+interface Props {
+  type: ServiceAnimationType;
+}
+
+const { type } = Astro.props;
+
+// For the two centered-brain compositions, we share zone labels + input lists.
+const CENTERED_ZONES: Record<'frontdesk' | 'documents', [string, string, string]> = {
+  frontdesk: ['INCOMING', 'AI ENGINE', 'BOOKED'],
+  documents: ['YOUR DOCS', 'AI ENGINE', 'ANSWER'],
+};
+const CENTERED_INPUTS: Record<'frontdesk' | 'documents', string[]> = {
+  frontdesk: ['Phone call', 'Website chat', 'SMS', 'Voicemail', 'Form submission'],
+  documents: ['Contracts', 'Invoices', 'SOPs', 'Manuals', 'Meeting notes'],
+};
+
+const inputYs = [121, 161, 201, 241, 281];
+const inputDelays = [0, 0.6, 1.2, 1.8, 2.4];
+const isCentered = type === 'frontdesk' || type === 'documents';
+const zoneL = isCentered ? CENTERED_ZONES[type as 'frontdesk' | 'documents'][0] : '';
+const zoneC = isCentered ? CENTERED_ZONES[type as 'frontdesk' | 'documents'][1] : '';
+const zoneR = isCentered ? CENTERED_ZONES[type as 'frontdesk' | 'documents'][2] : '';
+const inputs = isCentered ? CENTERED_INPUTS[type as 'frontdesk' | 'documents'] : [];
+
+const ariaLabels: Record<ServiceAnimationType, string> = {
+  response: 'Customer messages flowing into a chat thread, AI drafting replies, sent confirmations stacking up',
+  frontdesk: 'Incoming channels flowing into an AI engine, output booked appointments and captured leads',
+  documents: 'Documents flowing into an AI engine, output a sourced answer',
+  workflow: 'Tasks entering a horizontal automation pipeline, completed work emerging on the right',
+  insights: 'Multiple data sources feeding a single live business dashboard',
+  ainative: 'A current product on the left transforming into an AI-native version on the right',
+};
+---
+
+<div class="service-anim block w-full" data-service-anim>
+  <svg
+    viewBox="0 0 680 400"
+    preserveAspectRatio="xMidYMid meet"
+    class="block w-full h-auto"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label={ariaLabels[type]}
+    font-family="Inter, system-ui, sans-serif"
+  >
+    {/* ============================================================
+        Centered-brain layout — frontdesk + documents
+       ============================================================ */}
+    {isCentered && (
+      <>
+        <g font-size="9" font-weight="700" letter-spacing="1.6" fill="#9CA3AF">
+          <text x="105" y="32" text-anchor="middle">{zoneL}</text>
+          <text x="340" y="32" text-anchor="middle">{zoneC}</text>
+          <text x="575" y="32" text-anchor="middle">{zoneR}</text>
+        </g>
+
+        {inputs.map((label, i) => (
+          <g class="pulse-source" style={`animation-delay: ${inputDelays[i]}s`}>
+            <rect x="30" y={inputYs[i] - 15} width="150" height="30" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+            <circle cx="42" cy={inputYs[i]} r="2.5" fill="#C2410C" fill-opacity="0.65" />
+            <text x="50" y={inputYs[i] + 3.5} fill="#4B4B4B" font-size="10.5">{label}</text>
+          </g>
+        ))}
+
+        {inputs.map((_, i) => (
+          <line
+            x1="180"
+            y1={inputYs[i]}
+            x2="290"
+            y2="200"
+            stroke="#C2410C"
+            stroke-opacity="0.5"
+            stroke-width="1.5"
+            class="flow1"
+            style={`animation-delay: ${i * 0.18}s`}
+          />
+        ))}
+
+        {/* Brain */}
+        <circle cx="340" cy="200" r="50" fill="#C2410C" fill-opacity="0.06" />
+        <circle cx="340" cy="200" r="38" fill="#C2410C" fill-opacity="0.14" />
+        <circle cx="340" cy="200" r="40" fill="none" stroke="#C2410C" stroke-width="1" stroke-opacity="0.5" class="ring-expand" />
+        <circle cx="340" cy="200" r="40" fill="none" stroke="#C2410C" stroke-width="1" stroke-opacity="0.5" class="ring-expand-delayed" />
+        <circle cx="340" cy="200" r="24" fill="#C2410C" class="brain-core" />
+        <text x="340" y="204" text-anchor="middle" fill="#FFFFFF" font-size="12" font-weight="700" letter-spacing="0.6">AI</text>
+      </>
+    )}
+
+    {type === 'frontdesk' && (
+      <g>
+        <line x1="392" y1="200" x2="470" y2="200" stroke="#C2410C" stroke-opacity="0.5" stroke-width="1.5" class="flow2" />
+
+        <rect x="470" y="65" width="180" height="148" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+        <text x="482" y="83" fill="#9CA3AF" font-size="8" font-weight="700" letter-spacing="1.2">SCHEDULED</text>
+        <line x1="482" y1="89" x2="638" y2="89" stroke="#E5E5E0" stroke-width="1" />
+        {Array.from({ length: 28 }).map((_, i) => {
+          const col = i % 7;
+          const row = Math.floor(i / 7);
+          const x = 484 + col * 22;
+          const y = 100 + row * 22;
+          const isHL = i === 17;
+          return (
+            <rect x={x} y={y} width="18" height="18" rx="2" fill={isHL ? '#C2410C' : '#FAFAF8'} stroke="#E5E5E0" stroke-width="0.6" />
+          );
+        })}
+        <g class="fade-in-out">
+          <rect x="498" y="190" width="124" height="20" rx="4" fill="#C2410C" fill-opacity="0.12" stroke="#C2410C" stroke-opacity="0.4" stroke-width="0.8" />
+          <text x="560" y="204" text-anchor="middle" fill="#C2410C" font-size="10" font-weight="600">Tue 2:30pm · 30min</text>
+        </g>
+
+        <g class="fade-in-out" style="animation-delay: 1.2s">
+          <rect x="470" y="230" width="180" height="86" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <text x="482" y="248" fill="#9CA3AF" font-size="8" font-weight="700" letter-spacing="1.2">LEAD CAPTURED</text>
+          <line x1="482" y1="254" x2="638" y2="254" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="494" cy="282" r="13" fill="#F4EFE7" />
+          <text x="494" y="286" text-anchor="middle" fill="#C2410C" font-size="11" font-weight="700">JD</text>
+          <rect x="516" y="275" width="100" height="6" rx="3" fill="#0A0A0A" fill-opacity="0.4" />
+          <rect x="516" y="287" width="74" height="6" rx="3" fill="#E5E5E0" />
+        </g>
+      </g>
+    )}
+
+    {type === 'documents' && (
+      <g>
+        <line x1="392" y1="200" x2="470" y2="200" stroke="#C2410C" stroke-opacity="0.5" stroke-width="1.5" class="flow2" />
+
+        <rect x="470" y="65" width="180" height="74" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+        <text x="482" y="83" fill="#9CA3AF" font-size="8" font-weight="700" letter-spacing="1.2">QUESTION</text>
+        <text x="482" y="113" fill="#0A0A0A" font-size="11" font-weight="500" class="typewriter">What's our refund policy?</text>
+
+        <rect x="470" y="155" width="180" height="180" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+        <text x="482" y="173" fill="#9CA3AF" font-size="8" font-weight="700" letter-spacing="1.2">ANSWER</text>
+        <line x1="482" y1="179" x2="638" y2="179" stroke="#E5E5E0" stroke-width="1" />
+        <g stroke="#0A0A0A" stroke-opacity="0.65" stroke-width="3" stroke-linecap="round">
+          <line x1="482" y1="195" x2="638" y2="195" pathLength="1" class="line-draw" style="animation-delay: 0.2s" />
+          <line x1="482" y1="213" x2="618" y2="213" pathLength="1" class="line-draw" style="animation-delay: 0.6s" />
+          <line x1="482" y1="231" x2="600" y2="231" pathLength="1" class="line-draw" style="animation-delay: 1.0s" />
+          <line x1="482" y1="249" x2="608" y2="249" pathLength="1" class="line-draw" style="animation-delay: 1.4s" />
+          <line x1="482" y1="267" x2="586" y2="267" pathLength="1" class="line-draw" style="animation-delay: 1.8s" />
+        </g>
+        <g class="fade-in-out" style="animation-delay: 2.4s">
+          <rect x="482" y="298" width="156" height="22" rx="4" fill="#FAFAF8" stroke="#E5E5E0" stroke-width="0.8" />
+          <text x="492" y="312" fill="#9CA3AF" font-size="9" font-weight="700" letter-spacing="0.4">SOURCE</text>
+          <text x="534" y="312" fill="#C2410C" font-size="9.5" font-weight="600">Policy_v3.pdf · §4</text>
+        </g>
+      </g>
+    )}
+
+    {/* ============================================================
+        RESPONSE — vertical conversation thread (no central brain)
+       ============================================================ */}
+    {type === 'response' && (
+      <>
+        {/* Left: 3 inbox queue cards */}
+        <g class="pulse-source" style="animation-delay: 0s">
+          <rect x="20" y="80" width="160" height="44" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="34" cy="102" r="6" fill="#F4EFE7" />
+          <text x="34" y="106" text-anchor="middle" fill="#C2410C" font-size="8" font-weight="700">SK</text>
+          <text x="48" y="100" fill="#0A0A0A" font-size="10.5" font-weight="600">Sarah Kim</text>
+          <text x="48" y="113" fill="#9CA3AF" font-size="9">Order #4521 — refund?</text>
+        </g>
+        <g class="pulse-source" style="animation-delay: 0.6s">
+          <rect x="20" y="138" width="160" height="44" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="34" cy="160" r="6" fill="#F4EFE7" />
+          <text x="34" y="164" text-anchor="middle" fill="#C2410C" font-size="8" font-weight="700">MR</text>
+          <text x="48" y="158" fill="#0A0A0A" font-size="10.5" font-weight="600">Mike Rivera</text>
+          <text x="48" y="171" fill="#9CA3AF" font-size="9">Question about pricing</text>
+        </g>
+        <g class="pulse-source" style="animation-delay: 1.2s">
+          <rect x="20" y="196" width="160" height="44" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="34" cy="218" r="6" fill="#F4EFE7" />
+          <text x="34" y="222" text-anchor="middle" fill="#C2410C" font-size="8" font-weight="700">AT</text>
+          <text x="48" y="216" fill="#0A0A0A" font-size="10.5" font-weight="600">Anna Tan</text>
+          <text x="48" y="229" fill="#9CA3AF" font-size="9">Hours of operation?</text>
+        </g>
+
+        {/* Connecting flow lines from queue into phone */}
+        <line x1="180" y1="102" x2="220" y2="120" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow1" />
+        <line x1="180" y1="160" x2="220" y2="160" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow1" style="animation-delay: 0.2s" />
+        <line x1="180" y1="218" x2="220" y2="190" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow1" style="animation-delay: 0.4s" />
+
+        {/* Center: chat thread frame */}
+        <rect x="220" y="20" width="240" height="360" rx="14" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1.5" />
+
+        {/* Header */}
+        <rect x="220" y="20" width="240" height="44" fill="#FAFAF8" />
+        <line x1="220" y1="64" x2="460" y2="64" stroke="#E5E5E0" stroke-width="1" />
+        <circle cx="240" cy="42" r="10" fill="#C2410C" />
+        <text x="240" y="46" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="700">SK</text>
+        <text x="258" y="40" fill="#0A0A0A" font-size="11" font-weight="600">Sarah Kim</text>
+        <text x="258" y="52" fill="#9CA3AF" font-size="9">Customer · Active now</text>
+
+        {/* Customer message bubble */}
+        <rect x="232" y="78" width="192" height="46" rx="10" fill="#F4F4F0" />
+        <text x="244" y="96" fill="#0A0A0A" font-size="10">Hi! I have a question about</text>
+        <text x="244" y="110" fill="#0A0A0A" font-size="10">my recent order #4521...</text>
+
+        {/* AI drafting indicator */}
+        <rect x="232" y="138" width="92" height="24" rx="12" fill="#C2410C" fill-opacity="0.12" />
+        <text x="244" y="154" fill="#C2410C" font-size="9.5" font-weight="600">Drafting</text>
+        <circle cx="294" cy="150" r="2" fill="#C2410C" class="dot-blink-1" />
+        <circle cx="302" cy="150" r="2" fill="#C2410C" class="dot-blink-2" />
+        <circle cx="310" cy="150" r="2" fill="#C2410C" class="dot-blink-3" />
+
+        {/* Drafted reply bubble (accent) */}
+        <rect x="256" y="178" width="192" height="120" rx="10" fill="#C2410C" />
+        <g stroke="#FFFFFF" stroke-opacity="0.95" stroke-width="2.5" stroke-linecap="round">
+          <line x1="270" y1="198" x2="436" y2="198" pathLength="1" class="line-draw" style="animation-delay: 0s" />
+          <line x1="270" y1="214" x2="416" y2="214" pathLength="1" class="line-draw" style="animation-delay: 0.4s" />
+          <line x1="270" y1="230" x2="426" y2="230" pathLength="1" class="line-draw" style="animation-delay: 0.8s" />
+          <line x1="270" y1="246" x2="406" y2="246" pathLength="1" class="line-draw" style="animation-delay: 1.2s" />
+          <line x1="270" y1="262" x2="386" y2="262" pathLength="1" class="line-draw" style="animation-delay: 1.6s" />
+          <line x1="270" y1="278" x2="396" y2="278" pathLength="1" class="line-draw" style="animation-delay: 2.0s" />
+        </g>
+
+        {/* Bottom send area */}
+        <line x1="220" y1="320" x2="460" y2="320" stroke="#E5E5E0" stroke-width="1" />
+        <rect x="232" y="332" width="160" height="28" rx="14" fill="#FAFAF8" stroke="#E5E5E0" />
+        <text x="244" y="350" fill="#9CA3AF" font-size="9.5">Reply ready to send…</text>
+        <rect x="400" y="332" width="48" height="28" rx="14" fill="#C2410C" />
+        <text x="424" y="350" text-anchor="middle" fill="#FFFFFF" font-size="9.5" font-weight="600">Send</text>
+
+        {/* Connecting flow lines from phone to sent log */}
+        <line x1="460" y1="120" x2="500" y2="120" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow2" style="animation-delay: 0.3s" />
+        <line x1="460" y1="180" x2="500" y2="180" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow2" style="animation-delay: 0.5s" />
+        <line x1="460" y1="240" x2="500" y2="240" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow2" style="animation-delay: 0.7s" />
+
+        {/* Right: 3 sent confirmations */}
+        <g class="fade-in-out" style="animation-delay: 0s">
+          <rect x="500" y="100" width="160" height="40" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="516" cy="120" r="8" fill="#C2410C" fill-opacity="0.18" />
+          <path d="M512 120 L515 123 L520 117" stroke="#C2410C" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <text x="530" y="116" fill="#0A0A0A" font-size="10.5" font-weight="600">Replied · 32s</text>
+          <text x="530" y="130" fill="#9CA3AF" font-size="9">Brand voice matched</text>
+        </g>
+        <g class="fade-in-out" style="animation-delay: 1.0s">
+          <rect x="500" y="160" width="160" height="40" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="516" cy="180" r="8" fill="#C2410C" fill-opacity="0.18" />
+          <path d="M512 180 L515 183 L520 177" stroke="#C2410C" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <text x="530" y="176" fill="#0A0A0A" font-size="10.5" font-weight="600">Replied · 18s</text>
+          <text x="530" y="190" fill="#9CA3AF" font-size="9">Sourced from past reply</text>
+        </g>
+        <g class="fade-in-out" style="animation-delay: 2.0s">
+          <rect x="500" y="220" width="160" height="40" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="516" cy="240" r="8" fill="#C2410C" fill-opacity="0.18" />
+          <path d="M512 240 L515 243 L520 237" stroke="#C2410C" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <text x="530" y="236" fill="#0A0A0A" font-size="10.5" font-weight="600">Replied · 22s</text>
+          <text x="530" y="250" fill="#9CA3AF" font-size="9">Routed to billing team</text>
+        </g>
+      </>
+    )}
+
+    {/* ============================================================
+        WORKFLOW — horizontal pipeline (no central brain)
+       ============================================================ */}
+    {type === 'workflow' && (
+      <>
+        <g font-size="9" font-weight="700" letter-spacing="1.6" fill="#9CA3AF">
+          <text x="80" y="32" text-anchor="middle">TASKS</text>
+          <text x="340" y="32" text-anchor="middle">AUTOMATED PIPELINE</text>
+          <text x="615" y="32" text-anchor="middle">DONE</text>
+        </g>
+
+        {/* Left: 5 incoming task cards */}
+        {['Data entry', 'Invoice routing', 'Lead scoring', 'Reports', 'Onboarding'].map((label, i) => {
+          const y = 70 + i * 44;
+          return (
+            <g class="pulse-source" style={`animation-delay: ${i * 0.4}s`}>
+              <rect x="20" y={y} width="120" height="32" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+              <circle cx="32" cy={y + 16} r="2.5" fill="#C2410C" fill-opacity="0.7" />
+              <text x="42" y={y + 20} fill="#4B4B4B" font-size="10">{label}</text>
+            </g>
+          );
+        })}
+
+        {/* Funneling lines from tasks into stage 1 */}
+        {[86, 130, 174, 218, 262].map((y, i) => (
+          <line x1="140" y1={y} x2="200" y2="200" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow1" style={`animation-delay: ${i * 0.15}s`} />
+        ))}
+
+        {/* Pipeline rail */}
+        <line x1="222" y1="200" x2="288" y2="200" stroke="#C2410C" stroke-opacity="0.6" stroke-width="2" stroke-dasharray="4 4" class="flow2" />
+        <line x1="332" y1="200" x2="398" y2="200" stroke="#C2410C" stroke-opacity="0.6" stroke-width="2" stroke-dasharray="4 4" class="flow2" style="animation-delay: 0.3s" />
+        <line x1="442" y1="200" x2="508" y2="200" stroke="#C2410C" stroke-opacity="0.6" stroke-width="2" stroke-dasharray="4 4" class="flow2" style="animation-delay: 0.6s" />
+
+        {/* 4 pipeline stages */}
+        {[
+          { cx: 200, label: 'Detect' },
+          { cx: 310, label: 'Classify' },
+          { cx: 420, label: 'Execute' },
+          { cx: 530, label: 'Notify' },
+        ].map(({ cx, label }, i) => (
+          <g>
+            <circle cx={cx} cy="200" r="26" fill="#C2410C" fill-opacity="0.06" stroke="#C2410C" stroke-opacity="0.35" stroke-width="1" />
+            <circle cx={cx} cy="200" r="16" fill="#C2410C" />
+            <circle cx={cx} cy="200" r="3.5" fill="#FFFFFF" />
+            <text x={cx} y="244" text-anchor="middle" fill="#0A0A0A" font-size="10" font-weight="600">{label}</text>
+          </g>
+        ))}
+
+        {/* Output lines from stage 4 to done indicators */}
+        <line x1="556" y1="195" x2="572" y2="115" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow2" style="animation-delay: 0.9s" />
+        <line x1="556" y1="200" x2="572" y2="170" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow2" style="animation-delay: 1.0s" />
+        <line x1="556" y1="205" x2="572" y2="225" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow2" style="animation-delay: 1.1s" />
+
+        {/* Right: 3 done confirmations */}
+        <g class="fade-in-out" style="animation-delay: 0.5s">
+          <rect x="572" y="92" width="92" height="38" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="586" cy="111" r="7" fill="#C2410C" fill-opacity="0.18" />
+          <path d="M582 111 L585 114 L590 108" stroke="#C2410C" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <text x="600" y="108" fill="#0A0A0A" font-size="10" font-weight="600">Done</text>
+          <text x="600" y="120" fill="#9CA3AF" font-size="8.5">Routed</text>
+        </g>
+        <g class="fade-in-out" style="animation-delay: 1.0s">
+          <rect x="572" y="148" width="92" height="38" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="586" cy="167" r="7" fill="#C2410C" fill-opacity="0.18" />
+          <path d="M582 167 L585 170 L590 164" stroke="#C2410C" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <text x="600" y="164" fill="#0A0A0A" font-size="10" font-weight="600">Done</text>
+          <text x="600" y="176" fill="#9CA3AF" font-size="8.5">Filled</text>
+        </g>
+        <g class="fade-in-out" style="animation-delay: 1.5s">
+          <rect x="572" y="204" width="92" height="38" rx="6" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="586" cy="223" r="7" fill="#C2410C" fill-opacity="0.18" />
+          <path d="M582 223 L585 226 L590 220" stroke="#C2410C" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <text x="600" y="220" fill="#0A0A0A" font-size="10" font-weight="600">Done</text>
+          <text x="600" y="232" fill="#9CA3AF" font-size="8.5">Sent</text>
+        </g>
+
+        {/* Bottom: hours saved counter */}
+        <g class="pulse-source" style="animation-delay: 0.8s">
+          <rect x="190" y="320" width="300" height="48" rx="24" fill="#FFFFFF" stroke="#C2410C" stroke-width="1.5" />
+          <text x="340" y="343" text-anchor="middle" fill="#C2410C" font-size="14" font-weight="700" letter-spacing="0.4">30 hrs saved per month</text>
+          <text x="340" y="358" text-anchor="middle" fill="#9CA3AF" font-size="9.5">across the team, every month</text>
+        </g>
+      </>
+    )}
+
+    {/* ============================================================
+        INSIGHTS — dashboard takeover (no central brain)
+       ============================================================ */}
+    {type === 'insights' && (
+      <>
+        {/* Top: 5 source pills */}
+        {[
+          { x: 40, w: 92, label: 'QuickBooks' },
+          { x: 148, w: 76, label: 'Shopify' },
+          { x: 240, w: 60, label: 'CRM' },
+          { x: 316, w: 84, label: 'Analytics' },
+          { x: 416, w: 60, label: 'Excel' },
+        ].map((s, i) => (
+          <g class="pulse-source" style={`animation-delay: ${i * 0.3}s`}>
+            <rect x={s.x} y="22" width={s.w} height="24" rx="12" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1" />
+            <circle cx={s.x + 14} cy="34" r="2.5" fill="#C2410C" fill-opacity="0.75" />
+            <text x={s.x + 22} y="38" fill="#4B4B4B" font-size="10" font-weight="600">{s.label}</text>
+          </g>
+        ))}
+
+        {/* Connecting source lines into dashboard */}
+        {[
+          { x1: 86, x2: 180 },
+          { x1: 186, x2: 260 },
+          { x1: 270, x2: 320 },
+          { x1: 358, x2: 400 },
+          { x1: 446, x2: 480 },
+        ].map((l, i) => (
+          <line x1={l.x1} y1="46" x2={l.x2} y2="76" stroke="#C2410C" stroke-opacity="0.4" stroke-width="1.5" class="flow1" style={`animation-delay: ${i * 0.15}s`} />
+        ))}
+
+        {/* Live indicator */}
+        <g class="fade-in-out" style="animation-delay: 0s">
+          <rect x="500" y="22" width="58" height="24" rx="12" fill="#C2410C" />
+          <circle cx="514" cy="34" r="3" fill="#FFFFFF" />
+          <text x="540" y="38" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="700">Live</text>
+        </g>
+
+        {/* Main dashboard frame */}
+        <rect x="40" y="76" width="600" height="304" rx="10" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1.5" />
+        <rect x="40" y="76" width="600" height="40" fill="#FAFAF8" />
+        <line x1="40" y1="116" x2="640" y2="116" stroke="#E5E5E0" stroke-width="1" />
+        <text x="60" y="101" fill="#0A0A0A" font-size="13" font-weight="700">Insights · Week 12</text>
+        <text x="560" y="101" fill="#9CA3AF" font-size="10">Mar 18 — Mar 24</text>
+
+        {/* 3 KPI tiles */}
+        <g class="fade-in-out" style="animation-delay: 0s">
+          <rect x="60" y="132" width="180" height="76" rx="6" fill="#FAFAF8" />
+          <text x="74" y="152" fill="#9CA3AF" font-size="9" font-weight="700" letter-spacing="1.2">REVENUE</text>
+          <text x="74" y="183" fill="#0A0A0A" font-size="22" font-weight="700">$48.2K</text>
+          <text x="74" y="198" fill="#C2410C" font-size="10" font-weight="600">+12% vs last week</text>
+        </g>
+        <g class="fade-in-out" style="animation-delay: 0.4s">
+          <rect x="250" y="132" width="180" height="76" rx="6" fill="#FAFAF8" />
+          <text x="264" y="152" fill="#9CA3AF" font-size="9" font-weight="700" letter-spacing="1.2">MARGIN</text>
+          <text x="264" y="183" fill="#0A0A0A" font-size="22" font-weight="700">31.4%</text>
+          <text x="264" y="198" fill="#C2410C" font-size="10" font-weight="600">+4 pts</text>
+        </g>
+        <g class="fade-in-out" style="animation-delay: 0.8s">
+          <rect x="440" y="132" width="180" height="76" rx="6" fill="#FAFAF8" />
+          <text x="454" y="152" fill="#9CA3AF" font-size="9" font-weight="700" letter-spacing="1.2">ORDERS</text>
+          <text x="454" y="183" fill="#0A0A0A" font-size="22" font-weight="700">312</text>
+          <text x="454" y="198" fill="#C2410C" font-size="10" font-weight="600">+18 wow</text>
+        </g>
+
+        {/* Bar chart */}
+        <rect x="60" y="220" width="280" height="148" rx="6" fill="#FAFAF8" />
+        <text x="74" y="240" fill="#9CA3AF" font-size="9" font-weight="700" letter-spacing="1.2">DAILY REVENUE</text>
+        <line x1="74" y1="346" x2="324" y2="346" stroke="#E5E5E0" stroke-width="1" />
+        {[36, 48, 28, 60, 52, 42, 56].map((h, i) => (
+          <rect
+            x={84 + i * 34}
+            y={346 - h}
+            width="22"
+            height={h}
+            rx="2"
+            fill="#C2410C"
+            fill-opacity={(0.5 + i * 0.07).toFixed(2)}
+            class="bar-grow"
+            style={`animation-delay: ${i * 0.3}s`}
+          />
+        ))}
+
+        {/* Trend chart with insight callout */}
+        <rect x="350" y="220" width="270" height="148" rx="6" fill="#FAFAF8" />
+        <text x="364" y="240" fill="#9CA3AF" font-size="9" font-weight="700" letter-spacing="1.2">MARGIN TREND</text>
+        <polyline
+          points="368,338 402,322 436,326 470,300 504,310 538,278 600,258"
+          stroke="#C2410C"
+          stroke-width="2.5"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          pathLength="1"
+          class="line-draw"
+        />
+        <circle cx="600" cy="258" r="4" fill="#C2410C" />
+        <g class="fade-in-out" style="animation-delay: 1.6s">
+          <rect x="498" y="248" width="100" height="22" rx="11" fill="#C2410C" />
+          <text x="548" y="263" text-anchor="middle" fill="#FFFFFF" font-size="10" font-weight="700">+4 pts · premium SKUs</text>
+        </g>
+      </>
+    )}
+
+    {/* ============================================================
+        AINATIVE — before / after split (no central brain)
+       ============================================================ */}
+    {type === 'ainative' && (
+      <>
+        <g font-size="9" font-weight="700" letter-spacing="1.6">
+          <text x="160" y="32" text-anchor="middle" fill="#9CA3AF">BEFORE</text>
+          <text x="540" y="32" text-anchor="middle" fill="#C2410C">AFTER · AI-NATIVE</text>
+        </g>
+
+        {/* Left: BEFORE product mockup */}
+        <g class="pulse-source">
+          <rect x="40" y="60" width="240" height="300" rx="10" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1.5" />
+          <rect x="40" y="60" width="240" height="42" fill="#FAFAF8" />
+          <line x1="40" y1="102" x2="280" y2="102" stroke="#E5E5E0" stroke-width="1" />
+          <circle cx="60" cy="81" r="6" fill="#9CA3AF" fill-opacity="0.4" />
+          <rect x="74" y="77" width="82" height="6" rx="2" fill="#9CA3AF" fill-opacity="0.5" />
+          <rect x="60" y="124" width="200" height="8" rx="2" fill="#E5E5E0" />
+          <rect x="60" y="142" width="160" height="8" rx="2" fill="#E5E5E0" />
+          <rect x="60" y="160" width="180" height="8" rx="2" fill="#E5E5E0" />
+          <rect x="60" y="194" width="160" height="14" rx="3" fill="#FAFAF8" stroke="#E5E5E0" />
+          <rect x="60" y="220" width="120" height="14" rx="3" fill="#FAFAF8" stroke="#E5E5E0" />
+          <rect x="60" y="304" width="100" height="36" rx="6" fill="#F4F4F0" stroke="#E5E5E0" />
+          <text x="110" y="326" text-anchor="middle" fill="#9CA3AF" font-size="11">Action</text>
+        </g>
+
+        {/* Center: transformation */}
+        <line x1="290" y1="200" x2="390" y2="200" stroke="#C2410C" stroke-opacity="0.6" stroke-width="2" stroke-dasharray="5 5" class="flow2" />
+        <path d="M384 193 L398 200 L384 207" stroke="#C2410C" stroke-opacity="0.8" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+        <text x="340" y="180" text-anchor="middle" fill="#C2410C" font-size="10" font-weight="700" letter-spacing="1.2">+ AI</text>
+
+        {/* Sparkles in transition zone */}
+        <g class="fade-in-out" style="animation-delay: 0s">
+          <path d="M335 152 L337 158 L343 160 L337 162 L335 168 L333 162 L327 160 L333 158 Z" fill="#C2410C" />
+        </g>
+        <g class="fade-in-out" style="animation-delay: 0.6s">
+          <path d="M348 230 L350 235 L355 237 L350 239 L348 244 L346 239 L341 237 L346 235 Z" fill="#C2410C" />
+        </g>
+        <g class="fade-in-out" style="animation-delay: 1.2s">
+          <path d="M325 250 L326 254 L330 256 L326 258 L325 262 L324 258 L320 256 L324 254 Z" fill="#C2410C" />
+        </g>
+
+        {/* Right: AFTER product mockup */}
+        <rect x="400" y="60" width="240" height="300" rx="10" fill="#FFFFFF" stroke="#E5E5E0" stroke-width="1.5" />
+        <rect x="400" y="60" width="240" height="42" fill="#FAFAF8" />
+        <line x1="400" y1="102" x2="640" y2="102" stroke="#E5E5E0" stroke-width="1" />
+        <circle cx="420" cy="81" r="6" fill="#C2410C" />
+        <rect x="434" y="77" width="82" height="6" rx="2" fill="#0A0A0A" fill-opacity="0.55" />
+
+        {/* AI badge in top-right */}
+        <g class="fade-in-out" style="animation-delay: 0s">
+          <rect x="592" y="71" width="40" height="20" rx="10" fill="#C2410C" />
+          <text x="612" y="84" text-anchor="middle" fill="#FFFFFF" font-size="9" font-weight="700">AI</text>
+        </g>
+
+        <rect x="420" y="124" width="200" height="8" rx="2" fill="#0A0A0A" fill-opacity="0.55" />
+        <rect x="420" y="142" width="160" height="8" rx="2" fill="#0A0A0A" fill-opacity="0.4" />
+        <rect x="420" y="160" width="180" height="8" rx="2" fill="#0A0A0A" fill-opacity="0.5" />
+
+        {/* Sparkle */}
+        <g class="fade-in-out" style="animation-delay: 0.6s">
+          <path d="M608 144 L610 148 L614 150 L610 152 L608 156 L606 152 L602 150 L606 148 Z" fill="#C2410C" />
+        </g>
+
+        {/* AI suggestion bubble */}
+        <g class="fade-in-out" style="animation-delay: 1.0s">
+          <rect x="420" y="194" width="200" height="62" rx="6" fill="#C2410C" fill-opacity="0.10" stroke="#C2410C" stroke-width="0.8" stroke-opacity="0.45" />
+          <circle cx="432" cy="212" r="3" fill="#C2410C" />
+          <text x="442" y="215" fill="#C2410C" font-size="10" font-weight="700">Suggested for Sarah</text>
+          <text x="432" y="232" fill="#C2410C" fill-opacity="0.85" font-size="9.5">Customers like Sarah picked the Pro tier —</text>
+          <text x="432" y="244" fill="#C2410C" fill-opacity="0.85" font-size="9.5">24% more value over 6 months.</text>
+        </g>
+
+        {/* Action button + Ask AI */}
+        <rect x="420" y="304" width="100" height="36" rx="6" fill="#C2410C" />
+        <text x="470" y="326" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="600">Action</text>
+        <g class="fade-in-out" style="animation-delay: 1.4s">
+          <rect x="528" y="304" width="92" height="36" rx="6" fill="#FFFFFF" stroke="#C2410C" stroke-width="1.4" />
+          <circle cx="544" cy="322" r="3" fill="#C2410C" />
+          <text x="556" y="326" fill="#C2410C" font-size="11" font-weight="600">Ask AI</text>
+        </g>
+      </>
+    )}
+  </svg>
+</div>
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>('[data-service-anim]');
+  if ('IntersectionObserver' in window && els.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.removeAttribute('data-pause');
+          else entry.target.setAttribute('data-pause', 'true');
+        });
+      },
+      { threshold: 0, rootMargin: '64px 0px' }
+    );
+    els.forEach((el) => io.observe(el));
+  }
+</script>
