@@ -4,27 +4,25 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 
 // ---------------------------------------------------------------------------
-// EMAIL SETUP — Web3Forms (free, unlimited submissions)
+// EMAIL SETUP — Formspree (free, 50 submissions/month)
 // ---------------------------------------------------------------------------
-// 1. Go to https://web3forms.com
-// 2. Enter sujitmohanty75@gmail.com
-// 3. Web3Forms emails you an access key
-// 4. Paste it below as the value of ACCESS_KEY
+// Submissions are emailed to sujitmohanty75@gmail.com via Formspree. No
+// backend required. To swap providers, change the form's `action` URL and
+// the hidden field naming convention (e.g. `_subject`, `_next`, `_gotcha`).
 //
-// Submissions will land in sujitmohanty75@gmail.com automatically. No backend
-// required. To swap providers later (Formspree, custom serverless), just
-// change the form's `action` URL and the hidden fields below.
+// Previously used Web3Forms but they block .app TLDs (Railway's default
+// *.up.railway.app domain), causing 400 errors in production.
 // ---------------------------------------------------------------------------
-const ACCESS_KEY = 'a4bcd298-8494-414d-bea8-575b4a8e8aa9';
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xjglogaw';
 
 // NOTE: Astro renders this page statically at build time, so we can't read
 // `?sent=true` from Astro.url at render time. Both the form and the thank-you
 // state are rendered into the DOM, then a tiny inline script at the bottom of
 // the page reads the URL and toggles which one is visible.
 //
-// Web3Forms also requires the `redirect` field to be an absolute URL. It's
-// populated client-side by the same script using window.location.origin so it
-// works in dev (localhost) and prod without any config changes.
+// The `_next` (redirect-after-submit) field is populated client-side using
+// window.location.origin so it works in dev (localhost) and prod without any
+// config changes.
 
 const title = 'Send a brief · Northstar AI';
 const description =
@@ -118,20 +116,18 @@ const description =
 
           <form
             id="qb-form"
-            action="https://api.web3forms.com/submit"
+            action={FORMSPREE_ENDPOINT}
             method="POST"
             class="reveal mt-12 md:mt-16 space-y-7 md:space-y-8"
           >
-            {/* Web3Forms hidden config */}
-            <input type="hidden" name="access_key" value={ACCESS_KEY} />
-            <input type="hidden" name="subject" value="New brief from Northstar AI" />
-            <input type="hidden" name="from_name" value="Northstar AI · Quick brief" />
-            <input type="hidden" name="redirect" id="qb-redirect" value="" />
+            {/* Formspree hidden config — fields prefixed with `_` are reserved */}
+            <input type="hidden" name="_subject" value="New brief from Northstar AI" />
+            <input type="hidden" name="_next" id="qb-redirect" value="" />
 
-            {/* Honeypot — hidden from users, bots fill it and get rejected */}
+            {/* Honeypot — Formspree's built-in spam check uses `_gotcha` */}
             <input
-              type="checkbox"
-              name="botcheck"
+              type="text"
+              name="_gotcha"
               tabindex="-1"
               autocomplete="off"
               style="position:absolute;left:-9999px;opacity:0;height:0;width:0;"
