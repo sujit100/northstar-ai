@@ -1,4 +1,4 @@
-# Northstar AI — Consulting Site
+# Northstar AI Consulting
 
 A static, single-page marketing site built with Astro + Tailwind CSS.
 Editorial, minimal aesthetic. Zero JavaScript shipped to the client outside of the small reveal/nav scripts.

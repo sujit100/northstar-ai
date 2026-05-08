@@ -1,0 +1,190 @@
+---
+// 12-logo strip showing the AI models + integration platforms used in
+// engagements. Two of the logos (OpenAI, Slack) couldn't be sourced as SVGs
+// from Simple Icons (they were removed in 2024 over trademark concerns), so
+// those render as styled text wordmarks in their brand colors instead. Visual
+// height is normalised so they sit consistently in the marquee row.
+
+interface Logo {
+  name: string;
+  file?: string;
+  isText?: boolean;
+  color?: string;
+  // Show a small text label under the icon — useful for less-recognised brands
+  // whose mark alone isn't obvious. OpenAI/Slack are already text wordmarks
+  // so they don't need a label.
+  showLabel?: boolean;
+}
+
+const logos: Logo[] = [
+  { name: 'OpenAI', isText: true, color: '#000000' },
+  { name: 'Anthropic', file: '/logos/anthropic.svg', showLabel: true },
+  { name: 'Meta · Llama', file: '/logos/meta.svg', showLabel: true },
+  { name: 'Google Gemini', file: '/logos/googlegemini.svg', showLabel: true },
+  { name: 'Hugging Face', file: '/logos/huggingface.svg', showLabel: true },
+  { name: 'Perplexity', file: '/logos/perplexity.svg', showLabel: true },
+  { name: 'n8n', file: '/logos/n8n.svg', showLabel: true },
+  { name: 'Make', file: '/logos/make.svg', showLabel: true },
+  { name: 'Zapier', file: '/logos/zapier.svg' },
+  { name: 'Slack', isText: true, color: '#4A154B' },
+  { name: 'Notion', file: '/logos/notion.svg', showLabel: true },
+  { name: 'Obsidian', file: '/logos/obsidian.svg', showLabel: true },
+];
+---
+
+<section id="stack" class="section-pad" aria-labelledby="stack-heading">
+  <div class="container-page">
+    <div class="reveal">
+      <span class="label-eyebrow">Tools &amp; models</span>
+    </div>
+
+    <h2
+      id="stack-heading"
+      class="reveal mt-6 md:mt-8 heading-display text-[36px] sm:text-[46px] md:text-[56px] lg:text-[60px] tracking-tightest-3 max-w-[24ch]"
+    >
+      Workflows and AI agents built with
+      <span class="text-accent">the latest models that matter.</span>
+    </h2>
+
+    <p class="reveal mt-6 md:mt-8 max-w-[60ch] text-[17px] md:text-[19px] body-secondary leading-[1.55]">
+      Models from OpenAI, Anthropic, Meta, and Hugging Face. Integration platforms
+      like n8n, Make, and Zapier. The right tool for each job, not the trendiest one.
+    </p>
+
+    <div class="reveal mt-12 md:mt-16 logo-marquee" aria-hidden="false">
+      <div class="logo-track">
+        {
+          logos.map((logo) => (
+            <div class="logo-item" title={logo.name}>
+              {logo.isText ? (
+                <span class="logo-wordmark" style={`color: ${logo.color}`}>{logo.name}</span>
+              ) : (
+                <>
+                  <img src={logo.file} alt={logo.name} loading="lazy" />
+                  {logo.showLabel && <span class="logo-label">{logo.name}</span>}
+                </>
+              )}
+            </div>
+          ))
+        }
+        {/* Doubled track for seamless loop (decorative duplicate hidden from a11y) */}
+        {
+          logos.map((logo) => (
+            <div class="logo-item" title={logo.name} aria-hidden="true">
+              {logo.isText ? (
+                <span class="logo-wordmark" style={`color: ${logo.color}`}>{logo.name}</span>
+              ) : (
+                <>
+                  <img src={logo.file} alt="" loading="lazy" />
+                  {logo.showLabel && <span class="logo-label">{logo.name}</span>}
+                </>
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .logo-marquee {
+    position: relative;
+    overflow: hidden;
+    /* Soft fade on left/right edges so logos appear/disappear cleanly */
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black 80px,
+      black calc(100% - 80px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black 80px,
+      black calc(100% - 80px),
+      transparent 100%
+    );
+  }
+
+  .logo-track {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    width: max-content;
+    animation: scroll-logos 45s linear infinite;
+  }
+
+  .logo-marquee:hover .logo-track {
+    animation-play-state: paused;
+  }
+
+  .logo-item {
+    flex-shrink: 0;
+    /* Fixed height so labelled and unlabelled logos align consistently */
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0.88;
+    transition: opacity 0.2s ease;
+  }
+
+  .logo-item:hover {
+    opacity: 1;
+  }
+
+  .logo-item img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+
+  .logo-wordmark {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .logo-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: #6B6B6B;
+    white-space: nowrap;
+  }
+
+  @keyframes scroll-logos {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      /* 50% covers exactly the first set; -40px corrects for the gap that flex
+         inserts between the two doubled sets so the loop is seamless. */
+      transform: translateX(calc(-50% - 40px));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-track {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      row-gap: 32px;
+      column-gap: 56px;
+    }
+    .logo-marquee {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+</style>
