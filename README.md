@@ -54,20 +54,17 @@ Open `src/components/Hero.astro`. There's a comment marker:
 Replace the placeholder `<div>` immediately below it with your Spline / three.js / iframe embed.
 The slot is `min-h-[360px] lg:min-h-[500px]` and rounded — match those constraints.
 
-## Deploying to Railway
+## Deployment (AWS Amplify)
 
-This site is fully static, so any Railway service that serves the `dist/` folder works. The simplest path:
+The site is hosted on AWS Amplify Hosting (app `northstar-ai-website`, us-east-1) at
+<https://northstaraiconsult.com>.
 
-1. Push this repo to GitHub.
-2. In Railway: **New Project → Deploy from GitHub repo** → pick this repo.
-3. Railway auto-detects Node. Set the following:
-   - **Build command:** `npm run build`
-   - **Start command:** `npm run preview`
-   - **Root directory:** (leave blank)
-4. Railway injects `PORT` automatically; `npm run preview` reads it (`astro preview --host 0.0.0.0 --port $PORT`).
-5. Once deployed, go to **Settings → Networking → Custom Domain**, add your domain, and set the CNAME at your registrar to the value Railway shows.
-
-Alternative (recommended for pure static): use a static-hosting service like Caddy/Nginx via a custom Dockerfile and serve `dist/` directly. The `astro preview` approach above works out of the box on Railway with no Dockerfile.
+- Every push to `main` builds and deploys automatically. Build settings are in `amplify.yml`
+  (Node 20, `npm ci`, `npm run build`, output `dist/`).
+- The domain is registered at Cloudflare. DNS there holds three CNAME records, all **DNS only**
+  (not proxied): the certificate validation record, and `@` and `www` pointing at the Amplify
+  CloudFront address. `www` redirects to the bare domain.
+- The HTTPS certificate is issued and renewed by AWS.
 
 ## Accessibility
 
